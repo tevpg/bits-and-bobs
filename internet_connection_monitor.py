@@ -9,6 +9,11 @@ The idea is that this could be scheduled to run every five minutes or so.
 import ctypes
 import requests
 
+# Want to make the message box steal focus
+MB_OK = 0x00000000
+MB_ICONINFORMATION = 0x00000040
+MB_SETFOREGROUND = 0x00010000  # This flag makes the message box steal focus
+
 def check_internet_connection(url="http://example.com"):
     try:
         # Attempt to access a reliable website
