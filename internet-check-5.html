@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internet Connection Check</title>
+<style>
+    .not-active {
+        font-weight: bold;
+        color: red;
+    }
+</style>
+
+<script>
+    function checkInternetConnection() {
+        // Get current time for timestamp
+        var currentTime = new Date();
+        var timestamp = currentTime.getHours() + ':' + padNumber(currentTime.getMinutes());
+
+        // Check internet connection
+        checkResource('Internet connection check', 'https://upload.wikimedia.org/wikipedia/commons/0/08/Check-mark.png', 'internet-status', timestamp);
+
+        // Check server connection
+        checkResource('Server connection check', 'http://howland-e:42817/check-mark.png', 'server-status', timestamp);
+    }
+
+    function checkResource(checkName, url, elementId, timestamp) {
+        var imgUrl = url + '?t=' + timestamp; // Append timestamp as query parameter
+
+        var img = new Image();
+        img.onload = function() {
+            document.getElementById(elementId).innerHTML = timestamp + ' - ' + checkName + ': Active<br><br>';
+        };
+        img.onerror = function() {
+            document.getElementById(elementId).innerHTML = timestamp + ' - <span class="not-active">' + checkName + ': Not Active</span><br><br>';
+        };
+        img.src = imgUrl;
+    }
+
+    function padNumber(number) {
+        return (number < 10 ? '0' : '') + number; // Pad single-digit numbers with a leading zero
+    }
+
+    // Initial check
+    checkInternetConnection();
+
+    // Run the check every minute
+    setInterval(checkInternetConnection, 60 * 1000); // 1 minute in milliseconds
+
+</script>
+</head>
+<body>
+    <h1>Internet Connection Check</h1>
+    <div id="internet-status"></div> <!-- Internet connection check status -->
+    <div id="server-status"></div> <!-- Server connection check status -->
+</body>
+</html>
